@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心脏跳动和血液循环</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <div class="title">
+            <h1>心脏跳动和血液循环</h1>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 血液循环图 -->
+            <div class="circulation-diagram">
+                <!-- 背景图片 -->
+                <div class="diagram-background">
+                    <img src="images/376243127a8792b0d1b92a6dd627e62f.jpg" alt="心脏血液大循环图" id="backgroundImage">
+                </div>
+
+                <!-- SVG动画层 -->
+                <svg id="circulationSVG" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 定义渐变和动画路径 -->
+                    <defs>
+                        <!-- 血液流动渐变 -->
+                        <radialGradient id="bloodParticle" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#ff4444;stop-opacity:1" />
+                            <stop offset="70%" style="stop-color:#ff4444;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#ff4444;stop-opacity:0" />
+                        </radialGradient>
+
+                        <radialGradient id="bloodParticleBlue" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#4444ff;stop-opacity:1" />
+                            <stop offset="70%" style="stop-color:#4444ff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#4444ff;stop-opacity:0" />
+                        </radialGradient>
+
+                        <!-- 血管发光效果 -->
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- 基于用户长按拖拽绘制的完整血管路径网络 -->
+                    <!-- 动脉（红色，从心脏出发） -->
+                    <g id="arteries">
+                        <!-- 主要体循环动脉 -->
+                        <path id="artery-systemic" d="M 606 727 Q 669 712 677 705 Q 677 705 687 701 Q 687 701 698 699 Q 698 699 707 694 Q 707 694 713 686 Q 713 686 715 675 Q 715 675 717 665 Q 717 665 718 654 Q 718 654 721 643 Q 721 643 725 633 Q 725 633 728 622 Q 728 622 729 611 Q 729 611 728 600 Q 728 600 726 590 Q 726 590 725 579 Q 725 579 725 568 Q 725 568 725 558 Q 725 558 723 547 Q 723 547 723 536 Q 723 536 723 526 Q 723 526 723 515 Q 723 515 721 502 Q 721 502 721 492 Q 721 492 720 481 Q 720 481 717 470 Q 717 470 717 459 Q 717 459 713 449 Q 713 449 713 438 Q 713 438 713 427 Q 713 427 713 417 Q 713 417 713 406 Q 713 406 710 395 Q 710 395 709 385 Q 709 385 704 374 Q 704 374 701 361 Q 701 361 696 352 Q 696 352 691 342 Q 691 342 687 331 Q 687 331 679 323 Q 679 323 669 318 Q 669 318 660 312 Q 660 312 652 306 Q 652 306 642 301 Q 642 301 631 295 Q 631 295 621 291 Q 621 291 610 289 Q 610 289 599 286 Q 599 286 588 282 Q 588 282 580 288 Q 580 288 579 299 Q 579 299 577 310 Q 577 310 577 320 Q 577 320 577 331 Q 577 331 587 336 Q 587 336 598 338 Q 598 338 607 344 Q 607 344 615 350 Q 615 350 623 357 Q 623 357 626 368 Q 626 368 631 378 Q 631 378 631 389"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 到肝脏的动脉 -->
+                        <path id="artery-liver" d="M 610 643 Q 642 633 652 630 Q 652 630 663 628 Q 663 628 671 622 Q 671 622 682 618 Q 682 618 690 611 Q 690 611 693 600 Q 693 600 699 590 Q 699 590 704 581 Q 704 581 712 575 Q 712 575 718 566 Q 718 566 720 556 Q 720 556 720 545"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 到肾脏的动脉 -->
+                        <path id="artery-kidneys" d="M 553 579 Q 574 585 585 585 Q 585 585 596 585 Q 596 585 606 585 Q 606 585 617 585 Q 617 585 628 585 Q 628 585 637 579 Q 637 579 645 571 Q 645 571 655 566 Q 655 566 663 560 Q 663 560 669 551 Q 669 551 679 545 Q 679 545 687 539 Q 687 539 694 530 Q 694 530 701 521 Q 701 521 707 513 Q 707 513 713 504"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 到大脑的动脉 -->
+                        <path id="artery-brain" d="M 602 530 Q 615 530 625 528 Q 625 528 636 524 Q 636 524 640 513 Q 640 513 644 502 Q 644 502 647 492 Q 647 492 650 481 Q 650 481 653 470 Q 653 470 656 459 Q 656 459 663 451 Q 663 451 666 438 Q 666 438 672 430 Q 672 430 679 421 Q 679 421 687 414 Q 687 414 693 406 Q 693 406 701 400"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肺动脉主干 -->
+                        <path id="artery-pulmonary-main" d="M 672 504 Q 672 487 671 477 Q 671 477 667 466 Q 667 466 663 455 Q 663 455 663 445 Q 663 445 663 434 Q 663 434 671 425 Q 671 425 682 419 Q 682 419 690 412 Q 690 412 696 404 Q 696 404 706 397"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肺动脉分支 -->
+                        <path id="artery-pulmonary-branch" d="M 580 496 Q 599 483 609 477 Q 609 477 620 474 Q 620 474 629 468 Q 629 468 636 459 Q 636 459 640 449 Q 640 449 645 440 Q 645 440 650 430 Q 650 430 660 427 Q 660 427 671 421 Q 671 421 679 415 Q 679 415 687 408 Q 687 408 696 402"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 上肢动脉 -->
+                        <path id="artery-arms" d="M 609 160 Q 644 162 655 164 Q 655 164 666 165 Q 666 165 677 167 Q 677 167 685 173 Q 685 173 693 179 Q 693 179 701 186 Q 701 186 709 194 Q 709 194 718 199 Q 718 199 723 209 Q 723 209 723 220 Q 723 220 723 231 Q 723 231 723 241 Q 723 241 726 252 Q 726 252 726 263 Q 726 263 726 273 Q 726 273 726 284 Q 726 284 726 295 Q 726 295 726 305 Q 726 305 718 312 Q 718 312 707 316 Q 707 316 696 321 Q 696 321 688 327 Q 688 327 679 333"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 左侧分支动脉 -->
+                        <path id="artery-left-branch" d="M 555 269 Q 569 284 577 293 Q 577 293 583 303 Q 583 303 583 314 Q 583 314 583 325 Q 583 325 583 335 Q 583 335 588 344 Q 588 344 598 344 Q 598 344 609 346 Q 609 346 617 352 Q 617 352 625 359 Q 625 359 626 370 Q 626 370 631 382"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 右侧分支动脉 -->
+                        <path id="artery-right-branch" d="M 645 269 Q 653 288 648 299 Q 648 299 642 308 Q 642 308 636 318 Q 636 318 628 325 Q 628 325 621 333 Q 621 333 615 342"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+                    </g>
+
+                    <!-- 静脉（蓝色，回到心脏） -->
+                    <g id="veins">
+                        <!-- 上肢静脉回流 -->
+                        <path id="vein-arms" d="M 579 160 Q 556 160 545 162 Q 545 162 534 164 Q 534 164 523 164 Q 523 164 513 164 Q 513 164 502 169 Q 502 169 491 173 Q 491 173 483 180 Q 483 180 480 190 Q 480 190 479 201 Q 479 201 479 211 Q 479 211 475 222 Q 475 222 469 231 Q 469 231 467 241 Q 467 241 467 252 Q 467 252 467 263 Q 467 263 467 273 Q 467 273 467 284 Q 467 284 467 295 Q 467 295 469 305 Q 469 305 474 314 Q 474 314 482 320 Q 482 320 491 325 Q 491 325 499 331 Q 499 331 509 338 Q 509 338 518 344 Q 518 344 526 352 Q 526 352 536 355 Q 536 355 547 359 Q 547 359 558 363 Q 558 363 567 370 Q 567 370 577 376 Q 577 376 583 385 Q 583 385 591 391 Q 591 391 598 399"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 下肢静脉回流 -->
+                        <path id="vein-legs" d="M 583 733 Q 561 727 550 727 Q 550 727 540 727 Q 540 727 531 722 Q 531 722 523 714 Q 523 714 517 705 Q 517 705 510 697 Q 510 697 504 688 Q 504 688 498 680 Q 498 680 493 671 Q 493 671 488 662 Q 488 662 483 652 Q 483 652 480 641 Q 480 641 477 628 Q 477 628 475 618 Q 475 618 474 607 Q 474 607 474 596 Q 474 596 474 586 Q 474 586 474 575 Q 474 575 474 564 Q 474 564 474 553 Q 474 553 474 543 Q 474 543 474 532 Q 474 532 474 521 Q 474 521 474 511 Q 474 511 474 500 Q 474 500 474 489 Q 474 489 475 479 Q 475 479 479 468 Q 479 468 482 457 Q 482 457 487 447 Q 487 447 491 436 Q 491 436 498 427 Q 498 427 506 419 Q 506 419 517 415 Q 517 415 528 410 Q 528 410 539 410 Q 539 410 550 406 Q 550 406 560 404 Q 560 404 571 400 Q 571 400 582 399 Q 582 399 590 393 Q 590 393 601 393"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肾脏静脉回流 -->
+                        <path id="vein-kidneys" d="M 537 573 Q 526 573 515 570 Q 515 570 507 564 Q 507 564 499 556 Q 499 556 490 549 Q 490 549 483 541"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肝脏静脉回流 -->
+                        <path id="vein-liver" d="M 574 483 Q 556 470 553 459 Q 553 459 550 449 Q 550 449 547 438 Q 547 438 542 429 Q 542 429 534 421"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肺静脉回流1 -->
+                        <path id="vein-lungs-1" d="M 571 216 Q 585 235 590 244 Q 590 244 593 254 Q 593 254 593 265 Q 593 265 593 276 Q 593 276 593 286 Q 593 286 593 297 Q 593 297 593 308 Q 593 308 593 318 Q 593 318 593 329 Q 593 329 593 340 Q 593 340 593 350 Q 593 350 593 361 Q 593 361 593 372 Q 593 372 593 382"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+
+                        <!-- 肺静脉回流2 -->
+                        <path id="vein-lungs-2" d="M 623 218 Q 610 244 609 254 Q 609 254 607 265 Q 607 265 607 276 Q 607 276 610 286 Q 610 286 612 297 Q 612 297 613 308 Q 613 308 613 318 Q 613 318 606 327 Q 606 327 598 335 Q 598 335 591 344"
+                              stroke="transparent" stroke-width="6" fill="none" class="blood-vessel"/>
+                    </g>
+
+                    <!-- 血液流动动画元素 -->
+                    <g id="bloodFlow">
+                        <!-- 血液粒子将通过JavaScript动态创建 -->
+                    </g>
+                </svg>
+            </div>
+
+
+
+            <!-- 控制按钮 -->
+            <div class="controls">
+                <button id="contractionBtn" class="control-btn contraction-btn">
+                    <span class="btn-text">心脏收缩</span>
+                </button>
+                <button id="relaxationBtn" class="control-btn relaxation-btn">
+                    <span class="btn-text">心脏舒张</span>
+                </button>
+            </div>
+
+            <!-- 状态指示器 -->
+            <div class="status-indicator">
+                <div class="status-text">当前状态：<span id="currentStatus">静止</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
