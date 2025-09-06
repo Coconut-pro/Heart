@@ -127,7 +127,7 @@ class HeartCirculationController {
         // 添加发光效果
         particle.setAttribute('filter', 'url(#glow)');
 
-        // 创建动画元素
+        // 创建正向动画元素
         const animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
         animateMotion.setAttribute('dur', '3s');
         animateMotion.setAttribute('repeatCount', 'indefinite');
@@ -138,6 +138,24 @@ class HeartCirculationController {
 
         animateMotion.appendChild(mpath);
         particle.appendChild(animateMotion);
+
+        // 为动脉血液粒子创建逆向动画元素
+        if (type === 'artery') {
+            const reverseAnimateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+            reverseAnimateMotion.setAttribute('dur', '3s');
+            reverseAnimateMotion.setAttribute('repeatCount', 'indefinite');
+            reverseAnimateMotion.setAttribute('begin', `${delay}s`);
+            reverseAnimateMotion.setAttribute('keyTimes', '0;1');
+            reverseAnimateMotion.setAttribute('keyPoints', '1;0'); // 逆向流动
+
+            const reverseMpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
+            reverseMpath.setAttributeNS('http://www.w3.org/1999/xlink', 'href', pathId);
+
+            reverseAnimateMotion.appendChild(reverseMpath);
+            reverseAnimateMotion.classList.add('reverse-animation');
+            reverseAnimateMotion.style.display = 'none'; // 默认隐藏逆向动画
+            particle.appendChild(reverseAnimateMotion);
+        }
 
         return particle;
     }
@@ -162,8 +180,8 @@ class HeartCirculationController {
             contractionBtn.classList.add('active');
         }
 
-        // 显示动脉血流（血液流出心脏）
-        this.showArterialFlow();
+        // 显示动脉血流（逆向流动，从终点流向起点）
+        this.showArterialFlowReverse();
 
         // 隐藏静脉血流
         this.hideVenousFlow();
@@ -206,7 +224,7 @@ class HeartCirculationController {
             relaxationBtn.classList.add('active');
         }
 
-        // 显示静脉血流（血液流回心脏）
+        // 显示静脉血流（正常流动）
         this.showVenousFlow();
 
         // 隐藏动脉血流
@@ -231,12 +249,38 @@ class HeartCirculationController {
     }
 
     /**
-     * 显示动脉血流
+     * 显示动脉血流（正向）
      */
     showArterialFlow() {
         const arterialParticles = document.querySelectorAll('.artery-flow');
         arterialParticles.forEach(particle => {
             particle.classList.add('active');
+            // 显示正向动画，隐藏逆向动画
+            const normalAnimation = particle.querySelector('animateMotion:not(.reverse-animation)');
+            const reverseAnimation = particle.querySelector('animateMotion.reverse-animation');
+            if (normalAnimation) normalAnimation.style.display = 'block';
+            if (reverseAnimation) reverseAnimation.style.display = 'none';
+        });
+
+        // 高亮动脉血管
+        const arteries = document.querySelectorAll('#arteries path');
+        arteries.forEach(artery => {
+            artery.classList.add('highlight-red');
+        });
+    }
+
+    /**
+     * 显示动脉血流（逆向，从终点流向起点）
+     */
+    showArterialFlowReverse() {
+        const arterialParticles = document.querySelectorAll('.artery-flow');
+        arterialParticles.forEach(particle => {
+            particle.classList.add('active');
+            // 隐藏正向动画，显示逆向动画
+            const normalAnimation = particle.querySelector('animateMotion:not(.reverse-animation)');
+            const reverseAnimation = particle.querySelector('animateMotion.reverse-animation');
+            if (normalAnimation) normalAnimation.style.display = 'none';
+            if (reverseAnimation) reverseAnimation.style.display = 'block';
         });
 
         // 高亮动脉血管
@@ -253,6 +297,11 @@ class HeartCirculationController {
         const arterialParticles = document.querySelectorAll('.artery-flow');
         arterialParticles.forEach(particle => {
             particle.classList.remove('active');
+            // 隐藏所有动画
+            const normalAnimation = particle.querySelector('animateMotion:not(.reverse-animation)');
+            const reverseAnimation = particle.querySelector('animateMotion.reverse-animation');
+            if (normalAnimation) normalAnimation.style.display = 'none';
+            if (reverseAnimation) reverseAnimation.style.display = 'none';
         });
 
         // 重置动脉血管样式
